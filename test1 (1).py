@@ -136,7 +136,7 @@ class RestaurantManagementSystem:
                     writer.writerow([reservation.date, reservation.session, reservation.name,
                                      reservation.email, reservation.phone, reservation.num_guests])
             print("Data saved to file successfully!")
-        except Exception as e:
+        except IOError as e:
             print("Error saving data to file:", str(e))
 
 def main():
@@ -145,11 +145,15 @@ def main():
     # Load reservations from file
     try:
         with open('reservation_21097837.txt', 'r') as file:
-            reader = csv.reader(file)
+            reader = csv.reader(file, delimiter='|')
             next(reader)  # Skip header row
             for row in reader:
-                reservation = Reservation(row[0], row[1], row[2], row[3], row[4], int(row[5]))
-                restaurant.reservations.append(reservation)
+                if len(row) >= 6:  # Check if the line has at least 6 fields
+                    reservation = Reservation(row[0], row[1], row[2], row[3], row[4], int(row[5]))
+                    restaurant.reservations.append(reservation)
+            else:
+                print("Invalid line:", row)
+
         print("Reservations loaded successfully!")
     except FileNotFoundError:
         print("Reservation file not found.")
