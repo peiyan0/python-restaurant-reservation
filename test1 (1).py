@@ -1,5 +1,6 @@
 import csv
 from datetime import datetime, timedelta
+import random
 
 class Reservation:
     def __init__(self, date, session, name, email, phone, num_guests):
@@ -15,8 +16,19 @@ class RestaurantManagementSystem:
         self.reservations = []
 
     def add_reservation(self):
+        if len(self.reservations) >= 32:
+            print("All sessions are fully booked. No more reservations can be made.")
+            return
         date = self.get_valid_date()
         session = self.get_valid_session()
+        # Check if the selected session is fully booked
+        session_count = sum(1 for reservation in self.reservations if reservation.session == session)
+        if session_count >= 8:
+            print("The selected session is fully booked. Please choose a different session.")
+            return
+        # Format the session value as "Slot {session}"
+        session = f"Slot {session}"
+
         name = input("Enter the guest's name: ")
         while name == "" or name.isnumeric():
             print("Invalid name format!")
@@ -95,6 +107,8 @@ class RestaurantManagementSystem:
                 print("Reservation found! Please provide the updated information.")
                 reservation.date = self.get_valid_date()
                 reservation.session = self.get_valid_session()
+                # Format the session value as "Slot {session}"
+                reservation.session = f"Slot {reservation.session}"
                 reservation.num_guests = self.get_valid_num_guests()
 
                 print("Reservation updated successfully!")
@@ -109,12 +123,13 @@ class RestaurantManagementSystem:
             return
 
         print("Reservations:")
-        print("{:<12} {:<10} {:<20} {:<20} {:<12} {:<12}".format(
+        print("{:<12} {:<10} {:<20} {:<30} {:<15} {:<12}".format(
             "Date", "Session", "Name", "Email", "Phone", "Guests"))
         for reservation in self.reservations:
-            print("{:<12} {:<10} {:<20} {:<20} {:<12} {:<12}".format(
+            print("{:<12} {:<10} {:<20} {:<30} {:<15} {:<12d}".format(
                 reservation.date, reservation.session, reservation.name,
                 reservation.email, reservation.phone, reservation.num_guests))
+
 
     def generate_meal_recommendation(self):
         try:
@@ -129,15 +144,14 @@ class RestaurantManagementSystem:
 
     def save_data_to_file(self):
         try:
-            with open('reservation_21097837.txt', 'w', newline='') as file:
-                writer = csv.writer(file)
-                writer.writerow(['Date', 'Session', 'Name', 'Email', 'Phone', 'Guests'])
+            with open('reservation_21097837.txt', 'w') as file:
                 for reservation in self.reservations:
-                    writer.writerow([reservation.date, reservation.session, reservation.name,
-                                     reservation.email, reservation.phone, reservation.num_guests])
+                    line = f"{reservation.date}|{reservation.session}|{reservation.name}|{reservation.email}|{reservation.phone}|{reservation.num_guests}\n"
+                    file.write(line)
             print("Data saved to file successfully!")
-        except IOError as e:
+        except Exception as e:
             print("Error saving data to file:", str(e))
+
 
 def main():
     restaurant = RestaurantManagementSystem()
