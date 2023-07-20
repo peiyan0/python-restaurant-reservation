@@ -16,37 +16,43 @@ class RestaurantManagementSystem:
         self.reservations = []
 
     def add_reservation(self):
-        if len(self.reservations) >= 32:
-            print("All sessions are fully booked. No more reservations can be made.")
-            return
-        date = self.get_valid_date()
-        session = self.get_valid_session()
-        # Check if the selected session is fully booked
-        session_count = sum(1 for reservation in self.reservations if reservation.session == session)
-        if session_count >= 8:
-            print("The selected session is fully booked. Please choose a different session.")
-            return
-        # Format the session value as "Slot {session}"
-        session = f"Slot {session}"
+        while len(self.reservations) < 32:
+            if len(self.reservations) >= 32:
+                print("All sessions are fully booked. No more reservations can be made.")
+                return
+            date = self.get_valid_date()
+            session = self.get_valid_session()
+            # Check if the selected session is fully booked
+            session_count = sum(1 for reservation in self.reservations if reservation.session == session)
+            if session_count >= 8:
+                print("The selected session is fully booked. Please choose a different session.")
+                return
+            # Format the session value as "Slot {session}"
+            session = f"Slot {session}"
 
-        name = input("Enter the guest's name: ")
-        while name == "" or name.isnumeric():
-            print("Invalid name format!")
             name = input("Enter the guest's name: ")
-        email = input("Enter the guest's email: ")
-        while email == "" or "@" not in email:
-            print("Invalid email format!")
+            while name == "" or name.isnumeric():
+                print("Invalid name format!")
+                name = input("Enter the guest's name: ")
+            name = name.upper()
             email = input("Enter the guest's email: ")
-        phone = input("Enter the guest's phone number: ")
-        while phone == "" or phone.isalpha():
-            print("Invalid phone format!")
+            while email == "" or "@" not in email:
+                print("Invalid email format!")
+                email = input("Enter the guest's email: ")
             phone = input("Enter the guest's phone number: ")
+            while phone == "" or phone.isalpha():
+                print("Invalid phone format!")
+                phone = input("Enter the guest's phone number: ")
 
-        num_guests = self.get_valid_num_guests()
+            num_guests = self.get_valid_num_guests()
 
-        reservation = Reservation(date, session, name, email, phone, num_guests)
-        self.reservations.append(reservation)
-        print("Reservation added successfully!")
+            reservation = Reservation(date, session, name, email, phone, num_guests)
+            self.reservations.append(reservation)
+            print("Reservation added successfully!")
+
+            add_another = input("Do you want to add another reservation? (Y/N): ").lower()
+            if add_another != 'y':
+                break
 
     def get_valid_date(self):
         while True:
@@ -84,38 +90,48 @@ class RestaurantManagementSystem:
                 return int(num_guests)
 
     def cancel_reservation(self):
-        name = input("Enter the guest's name to cancel the reservation: ")
-        canceled = False
+        while True:
+            name = input("Enter the guest's name to cancel the reservation: ")
+            canceled = False
 
-        for reservation in self.reservations:
-            if reservation.name.lower() == name.lower():
-                self.reservations.remove(reservation)
-                canceled = True
+            for reservation in self.reservations:
+                if reservation.name.lower() == name.lower():
+                    self.reservations.remove(reservation)
+                    canceled = True
 
-        if canceled:
-            print("Reservation canceled successfully!")
-        else:
-            print("Reservation not found.")
+            if canceled:
+                print("Reservation canceled successfully!")
+            else:
+                print("Reservation not found.")
 
-    def update_reservation(self):
-        name = input("Enter the guest's name to update the reservation: ")
-        found = False
-
-        for reservation in self.reservations:
-            if reservation.name.lower() == name.lower():
-                found = True
-                print("Reservation found! Please provide the updated information.")
-                reservation.date = self.get_valid_date()
-                reservation.session = self.get_valid_session()
-                # Format the session value as "Slot {session}"
-                reservation.session = f"Slot {reservation.session}"
-                reservation.num_guests = self.get_valid_num_guests()
-
-                print("Reservation updated successfully!")
+            cancel_another = input("Do you want to cancel another reservation? (Y/N): ").lower()
+            if cancel_another != 'y':
                 break
 
-        if not found:
-            print("Reservation not found.")
+    def update_reservation(self):
+        while True:
+            name = input("Enter the guest's name to update the reservation: ")
+            found = False
+
+            for reservation in self.reservations:
+                if reservation.name.lower() == name.lower():
+                    found = True
+                    print("Reservation found! Please provide the updated information.")
+                    reservation.date = self.get_valid_date()
+                    reservation.session = self.get_valid_session()
+                    # Format the session value as "Slot {session}"
+                    reservation.session = f"Slot {reservation.session}"
+                    reservation.num_guests = self.get_valid_num_guests()
+
+                    print("Reservation updated successfully!")
+                    break
+
+            if not found:
+                print("Reservation not found.")
+
+            update_another = input("Do you want to update another reservation? (Y/N): ").lower()
+            if update_another != 'y':
+                break
 
     def display_reservations(self):
         if not self.reservations:
@@ -160,19 +176,15 @@ def main():
     try:
         with open('reservation_21097837.txt', 'r') as file:
             reader = csv.reader(file, delimiter='|')
-            next(reader)  # Skip header row
             for row in reader:
                 if len(row) >= 6:  # Check if the line has at least 6 fields
                     reservation = Reservation(row[0], row[1], row[2], row[3], row[4], int(row[5]))
                     restaurant.reservations.append(reservation)
-            else:
-                print("Invalid line:", row)
-
-        print("Reservations loaded successfully!")
     except FileNotFoundError:
         print("Reservation file not found.")
 
     while True:
+        print("---------")
         print("Main Menu")
         print("---------")
         print("a) Add Reservation(s)")
@@ -203,4 +215,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
