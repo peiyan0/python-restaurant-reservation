@@ -17,6 +17,7 @@ class RestaurantManagementSystem:
 
     def add_reservation(self):
         while len(self.reservations) < 32:
+            # Check if the all session is fully booked
             if len(self.reservations) >= 32:
                 print("All sessions are fully booked. No more reservations can be made.")
                 return
@@ -30,6 +31,7 @@ class RestaurantManagementSystem:
             # Format the session value as "Slot {session}"
             session = f"Slot {session}"
 
+            # Allow user to input information for add reservation
             name = input("Enter the guest's name: ")
             while name == "" or name.isnumeric():
                 print("Invalid name format!")
@@ -46,10 +48,12 @@ class RestaurantManagementSystem:
 
             num_guests = self.get_valid_num_guests()
 
+            # Append information into reservation list
             reservation = Reservation(date, session, name, email, phone, num_guests)
             self.reservations.append(reservation)
             print("Reservation added successfully!")
 
+            # Ask user if they want to add another reservation
             add_another = input("Do you want to add another reservation? (Y/N): ").lower()
             if add_another != 'y':
                 break
@@ -59,6 +63,7 @@ class RestaurantManagementSystem:
             date_str = input("Enter the reservation date (YYYY-MM-DD): ")
             try:
                 date = datetime.strptime(date_str, "%Y-%m-%d")
+                # Check if the reservation date entered is valid
                 if date < datetime.now() + timedelta(days=5):
                     print("Reservations must be made at least 5 days in advance.")
                 else:
@@ -74,6 +79,7 @@ class RestaurantManagementSystem:
             print("3: 6pm-8pm")
             print("4: 8pm-10pm")
             session = input("Enter the session (1-4): ")
+            # Check if the session entered is valid
             if session not in ["1", "2", "3", "4"]:
                 print("Invalid session. Please enter a session number between 1 and 4.")
             else:
@@ -82,6 +88,7 @@ class RestaurantManagementSystem:
     def get_valid_num_guests(self):
         while True:
             num_guests = input("Enter the number of guests: ")
+            # Check if the number of guest is valid
             if not num_guests.isdigit():
                 print("Invalid number. Please enter a valid number.")
             elif int(num_guests) > 4:
@@ -93,7 +100,7 @@ class RestaurantManagementSystem:
         while True:
             name = input("Enter the guest's name to cancel the reservation: ")
             canceled = False
-
+            # Remove the reservation name which user input
             for reservation in self.reservations:
                 if reservation.name.lower() == name.lower():
                     self.reservations.remove(reservation)
@@ -103,12 +110,12 @@ class RestaurantManagementSystem:
                 print("Reservation canceled successfully!")
             else:
                 print("Reservation not found.")
-
+            # Ask if user wants to cancel another reservation
             cancel_another = input("Do you want to cancel another reservation? (Y/N): ").lower()
             if cancel_another != 'y':
                 break
 
-    def update_reservation(self):
+    def update_reservation(self): # Update reservation information
         while True:
             name = input("Enter the guest's name to update the reservation: ")
             found = False
@@ -128,16 +135,16 @@ class RestaurantManagementSystem:
 
             if not found:
                 print("Reservation not found.")
-
+            # Ask if user wants to update another reservation
             update_another = input("Do you want to update another reservation? (Y/N): ").lower()
             if update_another != 'y':
                 break
 
-    def display_reservations(self):
+    def display_reservations(self): # Display entire reservation list
         if not self.reservations:
             print("No reservations found.")
             return
-
+        # Print formatted reservation list
         print("Reservations:")
         print("{:<12} {:<10} {:<20} {:<30} {:<15} {:<12}".format(
             "Date", "Session", "Name", "Email", "Phone", "Guests"))
@@ -147,20 +154,21 @@ class RestaurantManagementSystem:
                 reservation.email, reservation.phone, reservation.num_guests))
 
 
-    def generate_meal_recommendation(self):
+    def generate_meal_recommendation(self): # Generate random meal recommendation
         try:
             with open('menuItems_21097837.txt', 'r') as file:
                 menu_items = file.readlines()
         except FileNotFoundError:
             print("Menu items file not found.")
             return
-
+        # Print one random meal by using import random
         random_recommendation = random.choice(menu_items).strip()
         print("Random Meal Recommendation:", random_recommendation)
 
-    def save_data_to_file(self):
+    def save_data_to_file(self): # Save reservation into text file
         try:
             with open('reservation_21097837.txt', 'w') as file:
+                # Save formatted reservations into text file
                 for reservation in self.reservations:
                     line = f"{reservation.date}|{reservation.session}|{reservation.name}|{reservation.email}|{reservation.phone}|{reservation.num_guests}\n"
                     file.write(line)
@@ -169,7 +177,7 @@ class RestaurantManagementSystem:
             print("Error saving data to file:", str(e))
 
 
-def main():
+def main(): # Procedure the whole program
     restaurant = RestaurantManagementSystem()
 
     # Load reservations from file
@@ -177,13 +185,15 @@ def main():
         with open('reservation_21097837.txt', 'r') as file:
             reader = csv.reader(file, delimiter='|')
             for row in reader:
-                if len(row) >= 6:  # Check if the line has at least 6 fields
+                # Check if the line has at least 6 fields
+                if len(row) >= 6:
                     reservation = Reservation(row[0], row[1], row[2], row[3], row[4], int(row[5]))
                     restaurant.reservations.append(reservation)
     except FileNotFoundError:
         print("Reservation file not found.")
 
     while True:
+        # Prints the main menu of the management system
         print("---------")
         print("Main Menu")
         print("---------")
@@ -196,6 +206,7 @@ def main():
 
         choice = input("Enter your choice (a-f): ").lower()
 
+        # Check which selection user input
         if choice == 'a':
             restaurant.add_reservation()
         elif choice == 'b':
@@ -214,4 +225,4 @@ def main():
             print("Invalid choice. Please try again.")
 
 if __name__ == "__main__":
-    main()
+    main() # Starts the main function
