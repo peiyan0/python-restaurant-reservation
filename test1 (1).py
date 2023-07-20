@@ -15,6 +15,15 @@ class RestaurantManagementSystem:
     def __init__(self):
         self.reservations = []
 
+    def decorator(func): #decorates the functions
+        def wrapper(*args, **kwargs):
+            print("="*100)
+            func(*args, **kwargs)
+            print("="*100)
+        return wrapper
+    
+    @decorator
+
     def add_reservation(self):
         while len(self.reservations) < 32:
             # Check if the all session is fully booked
@@ -95,6 +104,8 @@ class RestaurantManagementSystem:
                 print("The restaurant seating accommodates a maximum of 4 guests in a group.")
             else:
                 return int(num_guests)
+    
+    @decorator
 
     def cancel_reservation(self):
         while True:
@@ -114,6 +125,8 @@ class RestaurantManagementSystem:
             cancel_another = input("Do you want to cancel another reservation? (Y/N): ").lower()
             if cancel_another != 'y':
                 break
+    
+    @decorator
 
     def update_reservation(self): # Update reservation information
         while True:
@@ -139,6 +152,8 @@ class RestaurantManagementSystem:
             update_another = input("Do you want to update another reservation? (Y/N): ").lower()
             if update_another != 'y':
                 break
+  
+    @decorator
 
     def display_reservations(self): # Display entire reservation list
         if not self.reservations:
@@ -152,7 +167,8 @@ class RestaurantManagementSystem:
             print("{:<12} {:<10} {:<20} {:<30} {:<15} {:<12d}".format(
                 reservation.date, reservation.session, reservation.name,
                 reservation.email, reservation.phone, reservation.num_guests))
-
+   
+    @decorator
 
     def generate_meal_recommendation(self): # Generate random meal recommendation
         try:
@@ -164,6 +180,8 @@ class RestaurantManagementSystem:
         # Print one random meal by using import random
         random_recommendation = random.choice(menu_items).strip()
         print("Random Meal Recommendation:", random_recommendation)
+  
+    @decorator
 
     def save_data_to_file(self): # Save reservation into text file
         try:
@@ -194,15 +212,16 @@ def main(): # Procedure the whole program
 
     while True:
         # Prints the main menu of the management system
-        print("---------")
+        print("-"*30)
         print("Main Menu")
-        print("---------")
+        print("-"*30)
         print("a) Add Reservation(s)")
         print("b) Cancel Reservation(s)")
         print("c) Update/Edit Reservation(s)")
         print("d) Display Reservations")
         print("e) Generate Meal Recommendation")
         print("f) Exit")
+        print("-"*30)
 
         choice = input("Enter your choice (a-f): ").lower()
 
