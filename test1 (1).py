@@ -26,10 +26,6 @@ class RestaurantManagementSystem:
 
     def add_reservation(self):
         while len(self.reservations) < 32:
-            # Check if the all session is fully booked
-            if len(self.reservations) >= 32:
-                print("All sessions are fully booked. No more reservations can be made.")
-                return
             date = self.get_valid_date()
             session = self.get_valid_session()
             # Check if the selected session is fully booked
@@ -37,8 +33,6 @@ class RestaurantManagementSystem:
             if session_count >= 8:
                 print("The selected session is fully booked. Please choose a different session.")
                 return
-            # Format the session value as "Slot {session}"
-            session = f"Slot {session}"
 
             # Allow user to input information for add reservation
             name = input("Enter the guest's name: ")
