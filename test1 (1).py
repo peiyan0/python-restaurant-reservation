@@ -92,7 +92,7 @@ class RestaurantManagementSystem:
             if session not in ["1", "2", "3", "4"]:
                 print("Invalid session. Please enter a session number between 1 and 4.")
             else:
-                return session
+                return "Slot " + session
 
     def get_valid_num_guests(self):
         while True:
@@ -181,7 +181,6 @@ class RestaurantManagementSystem:
         random_recommendation = random.choice(menu_items).strip()
         print("Random Meal Recommendation:", random_recommendation)
   
-    @decorator
 
     def save_data_to_file(self): # Save reservation into text file
         try:
@@ -228,10 +227,13 @@ def main(): # Procedure the whole program
         # Check which selection user input
         if choice == 'a':
             restaurant.add_reservation()
+            restaurant.save_data_to_file()
         elif choice == 'b':
             restaurant.cancel_reservation()
+            restaurant.save_data_to_file()
         elif choice == 'c':
             restaurant.update_reservation()
+            restaurant.save_data_to_file()
         elif choice == 'd':
             restaurant.display_reservations()
         elif choice == 'e':
