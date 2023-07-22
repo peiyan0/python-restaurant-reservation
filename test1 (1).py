@@ -2,7 +2,6 @@ import csv
 from datetime import datetime, timedelta
 import random
 
-
 class Reservation:
     def __init__(self, date, session, name, email, phone, num_guests):
         self.date = date
@@ -12,26 +11,26 @@ class Reservation:
         self.phone = phone
         self.num_guests = num_guests
 
-
 class RestaurantManagementSystem:
     def __init__(self):
         self.reservations = []
 
-    def decorator(func):  # decorates the functions
+    def decorator(func): #decorates the functions
         def wrapper(*args, **kwargs):
-            print("=" * 100)
+            print("="*100)
             func(*args, **kwargs)
-            print("=" * 100)
-
+            print("="*100)
         return wrapper
-
+    
     @decorator
+
     def add_reservation(self):
         while len(self.reservations) < 32:
             date = self.get_valid_date()
             session = self.get_valid_session()
-            # Check if the selected session is fully booked
-            session_count = sum(1 for reservation in self.reservations if reservation.session == session)
+
+            # Check if the selected session on the specified date is fully booked
+            session_count = sum(1 for reservation in self.reservations if reservation.date == date and reservation.session == session)
             if session_count >= 8:
                 print("The selected session is fully booked. Please choose a different session.")
                 return
@@ -100,8 +99,9 @@ class RestaurantManagementSystem:
                 print("The restaurant seating accommodates a maximum of 4 guests in a group.")
             else:
                 return int(num_guests)
-
+    
     @decorator
+
     def cancel_reservation(self):
         while True:
             name = input("Enter the guest's name to cancel the reservation: ")
@@ -120,9 +120,10 @@ class RestaurantManagementSystem:
             cancel_another = input("Do you want to cancel another reservation? (Y/N): ").lower()
             if cancel_another != 'y':
                 break
-
+    
     @decorator
-    def update_reservation(self):  # Update reservation information
+
+    def update_reservation(self): # Update reservation information
         while True:
             name = input("Enter the guest's name to update the reservation: ")
             found = False
@@ -130,11 +131,9 @@ class RestaurantManagementSystem:
             for reservation in self.reservations:
                 if reservation.name.lower() == name.lower():
                     found = True
-                    print("Reservation found! Please provide the updated information.")
+                    print("Reservation found! Please provide the updated information.\n")
                     reservation.date = self.get_valid_date()
                     reservation.session = self.get_valid_session()
-                    # Format the session value as "Slot {session}"
-                    reservation.session = f"Slot {reservation.session}"
                     reservation.num_guests = self.get_valid_num_guests()
 
                     print("Reservation updated successfully!")
@@ -146,9 +145,10 @@ class RestaurantManagementSystem:
             update_another = input("Do you want to update another reservation? (Y/N): ").lower()
             if update_another != 'y':
                 break
-
+  
     @decorator
-    def display_reservations(self):  # Display entire reservation list
+
+    def display_reservations(self): # Display entire reservation list
         if not self.reservations:
             print("No reservations found.")
             return
@@ -160,9 +160,10 @@ class RestaurantManagementSystem:
             print("{:<12} {:<10} {:<20} {:<30} {:<15} {:<12d}".format(
                 reservation.date, reservation.session, reservation.name,
                 reservation.email, reservation.phone, reservation.num_guests))
-
+   
     @decorator
-    def generate_meal_recommendation(self):  # Generate random meal recommendation
+
+    def generate_meal_recommendation(self): # Generate random meal recommendation
         try:
             with open('menuItems_21097837.txt', 'r') as file:
                 menu_items = file.readlines()
@@ -172,8 +173,9 @@ class RestaurantManagementSystem:
         # Print one random meal by using import random
         random_recommendation = random.choice(menu_items).strip()
         print("Random Meal Recommendation:", random_recommendation)
+  
 
-    def save_data_to_file(self):  # Save reservation into text file
+    def save_data_to_file(self): # Save reservation into text file
         try:
             with open('reservation_21097837.txt', 'w') as file:
                 # Save formatted reservations into text file
@@ -185,7 +187,7 @@ class RestaurantManagementSystem:
             print("Error saving data to file:", str(e))
 
 
-def main():  # Procedure the whole program
+def main(): # Procedure the whole program
     restaurant = RestaurantManagementSystem()
 
     # Load reservations from file
@@ -200,19 +202,21 @@ def main():  # Procedure the whole program
     except FileNotFoundError:
         print("Reservation file not found.")
 
+    print("\nWelcome to Charming Thyme Trattoria!")
+    print("Home of Exquisite Fine Dining\n")
+
     while True:
         # Prints the main menu of the management system
-        print("Welcome to Charming Thyme Trattoria Restaurant!")
-        print("-" * 30)
+        print("-"*55)
         print("Main Menu")
-        print("-" * 30)
+        print("-"*55)
         print("a) Add Reservation(s)")
         print("b) Cancel Reservation(s)")
-        print("c) Update/Edit Reservation(s)")
-        print("d) Display Reservations")
-        print("e) Generate Meal Recommendation")
+        print("c) Edit Reservation(s)")
+        print("d) View All Reservations")
+        print("e) Surprise Me! - Generate Meal Recommendation")
         print("f) Exit")
-        print("-" * 30)
+        print("-"*55)
 
         choice = input("Enter your choice (a-f): ").lower()
 
@@ -232,13 +236,11 @@ def main():  # Procedure the whole program
             restaurant.generate_meal_recommendation()
         elif choice == 'f':
             restaurant.save_data_to_file()
-            print("-" * 50)
-            print("Thanks for visting our page, hope to see you soon!")
-            print("Exiting the program...")
+            print("\nThank you for dining at Charming Thyme Trattoria!")
+            print("Have a wonderful day. Goodbye!\n")
             break
         else:
             print("Invalid choice. Please try again.")
 
-
 if __name__ == "__main__":
-    main()  # Starts the main function
+    main() # Starts the main function
