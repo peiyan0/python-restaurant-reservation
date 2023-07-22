@@ -1,7 +1,7 @@
 2023-12-06|Slot 1|JOHN ZHANG|johnzhang@gmail.com|0101234567|4
 2023-12-10|Slot 3|DAVID LI|davidli@hotmail.com|0112345678|2
 2023-12-07|Slot 2|MATTHEW WANG|matthewwang@yahoo.com|0123456789|3
-2023-12-13|SLot 3|ESTHER CHEN|estherchen@gmail.com|0134567890|2
+2023-12-13|Slot 3|ESTHER CHEN|estherchen@gmail.com|0134567890|2
 2023-12-03|Slot 4|REBECCA LIU|rebeccaliu@hotmail.com|0145678901|4
 2023-12-11|Slot 2|SAMUEL WU|samuelwu@yahoo.com|0156789012|2
 2023-12-08|Slot 1|GRACE HUANG|gracehuang@gmail.com|0167890123|3
