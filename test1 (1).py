@@ -41,11 +41,11 @@ class RestaurantManagementSystem:
             session_count = sum(1 for reservation in self.reservations if reservation.date == date and reservation.session == session)
             if session_count >= 8:
                 print("The selected session is fully booked. Please choose a different session.")
-                return
+                continue
 
             # Allow user to input information for add reservation
             name = input("Enter the guest's name: ").strip()
-            while name == "" or not name.isalpha():
+            while name == "" or name.isnumeric():
                 print("Invalid name format! Please enter a valid name (alphabetic characters only).")
                 name = input("Enter the guest's name: ")
             name = name.upper()
@@ -111,7 +111,6 @@ class RestaurantManagementSystem:
                 print("The restaurant seating accommodates a maximum of 4 guests in a single reservation.")
             else:
                 return int(num_guests)
-            
     # Cancel reservation function
     @decorator
     def cancel_reservation(self):
