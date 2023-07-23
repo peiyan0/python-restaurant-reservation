@@ -102,7 +102,6 @@ class RestaurantManagementSystem:
     # Function to get a valid number of guests
     def get_valid_num_guests(self):
         while True:
-            print("The restaurant can accommodate a maximum of 4 guests in a single reservation.")
             num_guests = input("Enter the number of guests: ")
             # Check if the number of guest is valid
             if not num_guests.isdigit():
@@ -111,6 +110,7 @@ class RestaurantManagementSystem:
                 print("The restaurant seating accommodates a maximum of 4 guests in a single reservation.")
             else:
                 return int(num_guests)
+            
     # Cancel reservation function
     @decorator
     def cancel_reservation(self):
