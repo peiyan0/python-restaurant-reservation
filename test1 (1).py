@@ -54,8 +54,8 @@ class RestaurantManagementSystem:
                 print("Invalid email format! Please enter a valid email address.")
                 email = input("Enter the guest's email: ")
             phone = input("Enter the guest's phone number: ").strip()
-            while phone == "" or phone.isalpha() or len(phone) != 10:
-                print("Invalid phone format! Please enter a valid phone number (10 digits).")
+            while phone == "" or phone.isalpha() or len(phone) not in [10, 11]:
+                print("Invalid phone format! Please enter a valid phone number (10-11 digits).")
                 phone = input("Enter the guest's phone number: ")
 
             num_guests = self.get_valid_num_guests()
@@ -178,6 +178,8 @@ class RestaurantManagementSystem:
         try:
             with open('menuItems_21097837.txt', 'r') as file:
                 menu_items = file.readlines()
+                if not menu_items:
+                    raise FileNotFoundError
         except FileNotFoundError:
             print("Menu items file not found.")
             return
