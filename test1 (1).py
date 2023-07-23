@@ -135,47 +135,24 @@ class RestaurantManagementSystem:
     
     # Update reservation information
     @decorator
-    def update_reservation(self):
+    def update_reservation(self): 
         while True:
-            # Ask for the initial reservation details to update
-            print("Please provide the details of the reservation to update:")
-            name = input("Enter the guest's name: ").strip()
-            date = input("Enter the reservation date (YYYY-MM-DD): ").strip()
+            name = input("Enter the guest's name to update the reservation: ")
+            found = False
 
-            # Find the reservation based on the provided details
-            found_reservations = [reservation for reservation in self.reservations if reservation.name.lower() == name.lower() and reservation.date == date]
-            
-            if not found_reservations:
-                print("Reservation not found.")
-                # Ask if user wants to update another reservation
-                update_another = input("Do you want to update another reservation? (Y/N): ").lower()
-                if update_another != 'y':
-                    break
-                else:
-                    continue
-
-            # Display the found reservations for the user to choose which one to update
-            print("Found reservations:")
-            for i, reservation in enumerate(found_reservations, 1):
-                print(f"{i}) Date: {reservation.date} - Session: {reservation.session} - Guests: {reservation.num_guests}")
-
-            try:
-                choice = int(input("Enter the number of the reservation to update: "))
-                if 1 <= choice <= len(found_reservations):
-                    reservation = found_reservations[choice - 1]
-
-                    # Prompt the user for the updated information
-                    print("Please provide the updated information:")
+            for reservation in self.reservations:
+                if reservation.name.lower() == name.lower():
+                    found = True
+                    print("Reservation found! Please provide the updated information.\n")
                     reservation.date = self.get_valid_date()
                     reservation.session = self.get_valid_session()
                     reservation.num_guests = self.get_valid_num_guests()
 
                     print("Reservation updated successfully!")
-                else:
-                    print("Invalid choice. Please choose a valid reservation.")
-            except ValueError:
-                print("Invalid input. Please enter a number corresponding to a reservation.")
+                    break
 
+            if not found:
+                print("Reservation not found.")
             # Ask if user wants to update another reservation
             update_another = input("Do you want to update another reservation? (Y/N): ").lower()
             if update_another != 'y':
