@@ -106,7 +106,7 @@ class RestaurantManagementSystem:
             # Check if the number of guest is valid
             if not num_guests.isdigit():
                 print("Invalid number. Please enter a valid number.")
-            elif int(num_guests) > 4:
+            elif int(num_guests) not in range(1, 5):
                 print("The restaurant seating accommodates a maximum of 4 guests in a single reservation.")
             else:
                 return int(num_guests)
